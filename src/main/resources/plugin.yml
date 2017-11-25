@@ -1,0 +1,8 @@
+name: MinecraftJPVoteMissFiller
+main: com.jaoafa.MinecraftJPVoteMissFiller.MinecraftJPVoteMissFiller
+version: 0.0.1
+description: MinecraftJapanServersで多発している投票受信失敗の対応用のプラグイン。
+database: true
+author: mine_book000
+softdepend: [Votifier, DiscordMC]
+website: https://jaoafa.com/
