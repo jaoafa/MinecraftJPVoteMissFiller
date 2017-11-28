@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.jaoafa.MinecraftJPVoteMissFiller.Discord.Discord;
+import com.jaoafa.MinecraftJPVoteMissFiller.Event.OnVotifierEvent;
 
 public class MinecraftJPVoteMissFiller extends JavaPlugin {
 	public static Connection c = null;
@@ -22,15 +23,13 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 	/**
 	 * プラグインが起動したときに呼び出し
 	 * @author mine_book000
-	 * @since 2017/10/31
+	 * @since 2017/11/25
 	 */
 	@Override
 	public void onEnable() {
 		// クレジット
 		getLogger().info("(c) jao Minecraft Server MinecraftJPVoteMissFiller Project.");
 		getLogger().info("Product by tomachi.");
-
-		Load_Plugin("LunaChat");
 
 		instance = this;
 		MinecraftJPVoteMissFiller = this;
@@ -39,6 +38,10 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 		Import_Listener();
 		// コンフィグロード
 		loadConfig();
+
+
+
+		new MCJPChecker(this).run();
 	}
 
 	/**
@@ -46,8 +49,10 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 	 * @author mine_book000
 	 */
 	private void Import_Listener(){
-		//getServer().getPluginManager().registerEvents(new PeriodSuccessCounter(this), this);
+		getServer().getPluginManager().registerEvents(new OnVotifierEvent(this), this);
 	}
+
+
 
 	private void loadConfig(){
 		FileConfiguration conf = getConfig();
@@ -100,17 +105,19 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 	/**
 	 * プラグインが停止したときに呼び出し
 	 * @author mine_book000
-	 * @since 2017/10/31
+	 * @since 2017/11/25
 	 */
 	@Override
 	public void onDisable() {
 
 	}
 
+
 	/**
 	 * 連携プラグイン確認
 	 * @author mine_book000
 	 */
+/*
 	private void Load_Plugin(String PluginName){
 		if(getServer().getPluginManager().isPluginEnabled(PluginName)){
 			getLogger().info("MinecraftJPVoteMissFiller Success(LOADED: " + PluginName + ")");
@@ -122,6 +129,7 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 			return;
 		}
 	}
+*/
 
 	/**
 	 * コマンドの実行に対してメッセージを返信します。
