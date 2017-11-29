@@ -39,9 +39,8 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 		// コンフィグロード
 		loadConfig();
 
-
-
-		new MCJPChecker(this).run();
+		OnVotifierEvent.first();
+		MCJPChecker.first();
 	}
 
 	/**
@@ -73,6 +72,8 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 			getLogger().info("Disable MinecraftJPVoteMissFiller...");
 			getServer().getPluginManager().disablePlugin(this);
 		}
+
+		new MCJPChecker(this).runTaskTimerAsynchronously(this, 0L, 6000L);
 	}
 
 	/**
@@ -126,7 +127,7 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 			getLogger().warning("MinecraftJPVoteMissFiller ERR(NOTLOADED: " + PluginName + ")");
 			getLogger().info("Disable MinecraftJPVoteMissFiller...");
 			getServer().getPluginManager().disablePlugin(this);
-			return;
+			return;MinecraftJPVoteMissFiller
 		}
 	}
 */

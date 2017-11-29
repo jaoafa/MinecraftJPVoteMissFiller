@@ -102,13 +102,16 @@ public class OnVotifierEvent implements Listener {
 	static File file = null;
 	/**
 	 * 投票受信済み情報をロードしたりデータを保存したり初期設定をします。
-	 * @param plugin プラグインのJavaPluginを指定
 	 * @return 初期設定を完了したかどうか
 	 * @author mine_book000
 	 */
 	public static boolean first(){
+		if(plugin == null){
+			plugin = MinecraftJPVoteMissFiller.getInstance();
+		}
+
 		// 設定ファイルがなければ作成
-		File file = new File(plugin.getDataFolder(), "voted.yml");
+		File file = new File(plugin.getDataFolder(), "voted_received.yml");
 		if(!file.exists()){
 			try {
 				file.createNewFile();
@@ -151,8 +154,8 @@ public class OnVotifierEvent implements Listener {
 	 */
 	public static List<String> Load(){
 		FileConfiguration data = YamlConfiguration.loadConfiguration(file);
-		if(data.contains("VotedPlayers")){
-			return data.getStringList("VotedPlayers");
+		if(data.contains("VotedPlayersReceived")){
+			return data.getStringList("VotedPlayersReceived");
 		}else{
 			return null;
 		}
