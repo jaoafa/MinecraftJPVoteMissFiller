@@ -21,4 +21,8 @@ public class VoteMissFillerEvent extends Event {
 		return handlers;
 	}
 
+	public HandlerList getHandlerList() {
+
+		return handlers;
+	}
 }
