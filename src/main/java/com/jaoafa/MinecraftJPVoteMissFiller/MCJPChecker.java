@@ -26,6 +26,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.jaoafa.MinecraftJPVoteMissFiller.Event.OnVotifierEvent;
+
 public class MCJPChecker extends BukkitRunnable{
 	static JavaPlugin plugin;
 	public MCJPChecker(JavaPlugin plugin) {
@@ -63,11 +65,18 @@ public class MCJPChecker extends BukkitRunnable{
 		System.out.println("[MCJPCheck_Debug] NewVoted: " + String.join(", ", newvoted));
 
 		int i = 0;
+		List<String> alreadyreceived = OnVotifierEvent.Load();
 		for(String player : newvoted){
-			new MissVoteFillerEventGoClass(plugin, player).runTaskLaterAsynchronously(plugin, 20 + i);
-			i++;
+			if(alreadyreceived.contains(player)){
+				System.out.println("[MCJPCheck_Debug] " + player + ": Vote Already Received!");
+				alreadyreceived.remove(player);
+			}else{
+				System.out.println("[MCJPCheck_Debug] " + player + ": Vote Miss Received!");
+				new MissVoteFillerEventGoClass(plugin, player).runTaskLaterAsynchronously(plugin, 20 + i);
+				i++;
+			}
 		}
-
+		OnVotifierEvent.Save(alreadyreceived);
 		Save(newdata);
 	}
 

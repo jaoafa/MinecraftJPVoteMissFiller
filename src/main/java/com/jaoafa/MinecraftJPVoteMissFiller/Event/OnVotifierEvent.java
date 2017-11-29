@@ -136,7 +136,7 @@ public class OnVotifierEvent implements Listener {
 	 */
 	public static boolean Save(List<String> votedplayers){
 		FileConfiguration data = YamlConfiguration.loadConfiguration(file);
-		data.set("VotedPlayers", votedplayers);
+		data.set("VotedPlayersReceived", votedplayers);
 		try {
 			data.save(file);
 			return true;
