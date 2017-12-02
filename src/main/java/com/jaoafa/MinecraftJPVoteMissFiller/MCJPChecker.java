@@ -56,6 +56,8 @@ public class MCJPChecker extends BukkitRunnable{
 				}else{
 					newvoted.add(player);
 				}
+			}else{
+				newvoted.add(player);
 			}
 			nowkey++;
 		}
