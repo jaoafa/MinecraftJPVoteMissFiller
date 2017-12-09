@@ -9,7 +9,7 @@ import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.impl.events.GuildCreateEvent;
+import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.util.DiscordException;
@@ -153,7 +153,7 @@ public class Discord {
 	public static boolean send(String channelid_or_name, String message){
 		IChannel channel = null;
 		for (IChannel one : guild.getChannels()) {
-			if(!one.getID().equalsIgnoreCase(channelid_or_name)){
+			if(one.getLongID() != new Long(channelid_or_name)){
 				continue;
 			}
 			channel = one;
@@ -177,7 +177,7 @@ public class Discord {
 	public static boolean isChannel(String channelid_or_name){
 		IChannel channel = null;
 		for (IChannel one : guild.getChannels()) {
-			if(!one.getID().equalsIgnoreCase(channelid_or_name)){
+			if(one.getLongID() != new Long(channelid_or_name)){
 				continue;
 			}
 			channel = one;
@@ -202,7 +202,7 @@ public class Discord {
             return;
         }
 
-		if(event.getGuild().getID().equalsIgnoreCase("189377932429492224")){
+		if(event.getGuild().getLongID() == new Long("189377932429492224")){
 			plugin.getLogger().info("DiscordGuildを選択しました。" + event.getGuild().getName());
 			setGuild(event.getGuild());
 		}
@@ -212,10 +212,10 @@ public class Discord {
 		}
 
 		for (IChannel channel : event.getGuild().getChannels()) {
-			if(!channel.getID().equalsIgnoreCase("250613942106193921")){
+			if(channel.getLongID() != new Long("250613942106193921")){
 				continue;
 			}
-			if(!channel.getGuild().getID().equalsIgnoreCase(Discord.guild.getID())){
+			if(channel.getGuild().getLongID() != Discord.guild.getLongID()){
 				continue;
 			}
 			Discord.channel = channel;
