@@ -30,23 +30,11 @@ public class Discord {
 
 	public void start(){
 		try {
-			setClient(new ClientBuilder().withToken(token).build());
-		} catch (DiscordException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-			plugin.getLogger().info("Discordへの接続に失敗しました。(DiscordException Token)");
-			plugin.getLogger().info("Disable MinecraftJPVoteMissFiller...");
-			plugin.getServer().getPluginManager().disablePlugin(plugin);
-			return;
-		}
-		plugin.getLogger().info("Discordへの接続に成功しました。");
-		Discord4J.disableAudio();
-
-		//リスナー
-		client.getDispatcher().registerListener(this);
-
-		try {
-			client.login();
+			ClientBuilder builder = new ClientBuilder()
+				.withToken(token)
+				.registerListener(this);
+			Discord4J.disableAudio();
+			setClient(builder.login());
 		} catch (DiscordException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
