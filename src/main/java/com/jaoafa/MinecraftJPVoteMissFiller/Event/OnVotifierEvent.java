@@ -95,6 +95,7 @@ public class OnVotifierEvent implements Listener {
 	}
 	boolean addVotedPlayer(String name){
 		List<String> votedplayers = Load();
+		plugin.getLogger().info("プレイヤー「" + name + "」の投票を受信しました。");
 		votedplayers.add(name);
 		return Save(votedplayers);
 	}
