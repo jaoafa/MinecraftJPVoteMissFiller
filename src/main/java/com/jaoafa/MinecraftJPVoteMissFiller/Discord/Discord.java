@@ -289,7 +289,7 @@ public class Discord {
 		headers.put("User-Agent", "DiscordBot (https://jaoafa.com, v0.0.1)");
 
 		Map<String, String> contents = new HashMap<String, String>();
-		headers.put("content", message);
+		contents.put("content", message);
 		return postHttpJsonByJson("https://discordapp.com/api/channels/" + channelid + "/messages", headers, contents);
 	}
 
