@@ -57,7 +57,7 @@ public class OnVotifierEvent implements Listener {
 
 		UUID uuid = null;
 		try {
-			ResultSet res = statement.executeQuery("SELECT * FROM log WHERE player = '" + name + "'");
+			ResultSet res = statement.executeQuery("SELECT * FROM log WHERE player = '" + name + "' ORDER BY id DESC");
 			if(res.next()){
 				uuid = UUID.fromString(res.getString("uuid"));
 			}

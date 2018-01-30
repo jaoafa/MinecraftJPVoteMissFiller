@@ -56,8 +56,8 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 	private void loadConfig(){
 		FileConfiguration conf = getConfig();
 		if(conf.contains("sqluser") && conf.contains("sqlpassword")){
-			MinecraftJPVoteMissFiller.sqluser = conf.getString("sqluser");
-			MinecraftJPVoteMissFiller.sqlpassword = conf.getString("sqlpassword");
+			sqluser = conf.getString("sqluser");
+			sqlpassword = conf.getString("sqlpassword");
 			MySQL_Enable(conf.getString("sqluser"), conf.getString("sqlpassword"));
 		}else{
 			getLogger().info("MySQL Connect err. [conf NotFound]");
