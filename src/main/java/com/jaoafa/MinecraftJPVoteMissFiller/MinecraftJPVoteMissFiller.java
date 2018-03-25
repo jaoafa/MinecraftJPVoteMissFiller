@@ -9,16 +9,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.jaoafa.MinecraftJPVoteMissFiller.Discord.Discord;
 import com.jaoafa.MinecraftJPVoteMissFiller.Event.OnVotifierEvent;
 
 public class MinecraftJPVoteMissFiller extends JavaPlugin {
 	public static Connection c = null;
 	public static String sqluser;
 	public static String sqlpassword;
+	public static String sqlserver = "jaoafa.com";
 	public static JavaPlugin instance = null;
 	public static MinecraftJPVoteMissFiller MinecraftJPVoteMissFiller = null;
-	public static Discord discord = null;
+	public static String discordtoken = null;
+	public static String serverchat_id = null;
 
 	/**
 	 * プラグインが起動したときに呼び出し
@@ -51,26 +52,31 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new OnVotifierEvent(this), this);
 	}
 
-
-
 	private void loadConfig(){
 		FileConfiguration conf = getConfig();
 		if(conf.contains("sqluser") && conf.contains("sqlpassword")){
 			sqluser = conf.getString("sqluser");
 			sqlpassword = conf.getString("sqlpassword");
-			MySQL_Enable(conf.getString("sqluser"), conf.getString("sqlpassword"));
+			if(conf.contains("sqlserver")){
+				sqlserver = (String) conf.get("sqlserver");
+			}
+			MySQL_Enable();
 		}else{
 			getLogger().info("MySQL Connect err. [conf NotFound]");
 			getLogger().info("Disable MinecraftJPVoteMissFiller...");
 			getServer().getPluginManager().disablePlugin(this);
 		}
 		if(conf.contains("discordtoken")){
-			discord = new Discord(this, conf.getString("discordtoken"));
-			discord.start();
+			discordtoken = conf.getString("discordtoken");
 		}else{
 			getLogger().info("Discordへの接続に失敗しました。 [conf NotFound]");
 			getLogger().info("Disable MinecraftJPVoteMissFiller...");
 			getServer().getPluginManager().disablePlugin(this);
+		}
+		if(conf.contains("serverchat_id")){
+			serverchat_id = (String) conf.get("serverchat_id");
+		}else{
+			serverchat_id = "250613942106193921"; // #server-chat
 		}
 
 		new MCJPChecker(this).runTaskTimerAsynchronously(this, 0L, 6000L);
@@ -80,8 +86,8 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 	 * MySQLの初期設定
 	 * @author mine_book000
 	 */
-	private void MySQL_Enable(String user, String password){
-		MySQL MySQL = new MySQL("jaoafa.com", "3306", "jaoafa", user, password);
+	private void MySQL_Enable(){
+		MySQL MySQL = new MySQL(sqlserver, "3306", "jaoafa", sqluser, sqlpassword);
 
 		try {
 			c = MySQL.openConnection();

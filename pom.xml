@@ -60,11 +60,6 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
-		<!-- Discord 4J -->
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
 	</repositories>
 
 	<dependencies>
@@ -72,20 +67,20 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.8.8-R0.1-SNAPSHOT</version>
+			<version>1.12.2-R0.1-SNAPSHOT</version>
 		</dependency>
 		<!--Bukkit API -->
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.8.8-R0.1-SNAPSHOT</version>
+			<version>1.12.2-R0.1-SNAPSHOT</version>
 		</dependency>
 		<!--CraftBukkit -->
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>1.8.8-R0.1-SNAPSHOT</version>
-			<systemPath>${basedir}/lib/craftbukkit-1.8.8.jar</systemPath>
+			<version>1.12.2-R0.1-SNAPSHOT</version>
+			<systemPath>${basedir}/lib/craftbukkit-1.12.2.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
 		<!-- Votifier -->
@@ -96,13 +91,6 @@
 			<classifier>shaded</classifier>
 			<systemPath>${basedir}/lib/votifier-1.9.jar</systemPath>
 			<scope>system</scope>
-		</dependency>
-		<!-- Discord 4J -->
-		<dependency>
-			<groupId>com.github.austinv11</groupId>
-			<artifactId>Discord4J</artifactId>
-			<version>2.9.3</version>
-			<classifier>shaded</classifier>
 		</dependency>
 	</dependencies>
 	<url>http://jaoafa.com/</url>
