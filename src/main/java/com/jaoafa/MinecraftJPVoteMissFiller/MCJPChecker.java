@@ -37,6 +37,9 @@ public class MCJPChecker extends BukkitRunnable{
 	@Override
 	public void run() {
 		List<String> newdata = getHttpsStringToVotedPlayers("https://minecraft.jp/servers/jaoafa.com");
+		if(newdata == null){
+			return;
+		}
 		List<String> olddata = Load();
 
 		List<String> newvoted = new ArrayList<String>();
@@ -62,8 +65,8 @@ public class MCJPChecker extends BukkitRunnable{
 			nowkey++;
 		}
 
-		System.out.println("[MCJPCheck_Debug] LastCheckVotedPlayers: " + String.join(", ", olddata));
-		System.out.println("[MCJPCheck_Debug] NowCheckVotedPlayers: " + String.join(", ", newdata));
+		//System.out.println("[MCJPCheck_Debug] LastCheckVotedPlayers: " + String.join(", ", olddata));
+		//System.out.println("[MCJPCheck_Debug] NowCheckVotedPlayers: " + String.join(", ", newdata));
 		System.out.println("[MCJPCheck_Debug] NewVoted: " + String.join(", ", newvoted));
 
 		int i = 0;
@@ -229,9 +232,9 @@ public class MCJPChecker extends BukkitRunnable{
 			}
 			in.close();
 			connect.disconnect();
-			System.out.println("[MCJPMissFiller] URLGetConnected: " + address);
+			//System.out.println("[MCJPMissFiller] URLGetConnected: " + address);
 			//System.out.println("[MCJPMissFiller] Data: " + builder.toString());
-			System.out.println("[MCJPMissFiller] DataCount: " + players.size() + "'s");
+			//System.out.println("[MCJPMissFiller] DataCount: " + players.size() + "'s");
 
 			return players;
 		}catch(Exception e){

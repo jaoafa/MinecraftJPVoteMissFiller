@@ -38,7 +38,7 @@ public class OnVotifierEvent implements Listener {
 		try {
 			statement = MinecraftJPVoteMissFiller.c.createStatement();
 		} catch (NullPointerException e) {
-			MySQL MySQL = new MySQL("jaoafa.com", "3306", "jaoafa", MinecraftJPVoteMissFiller.sqluser, MinecraftJPVoteMissFiller.sqlpassword);
+			MySQL MySQL = new MySQL(MinecraftJPVoteMissFiller.sqlserver, "3306", "jaoafa", MinecraftJPVoteMissFiller.sqluser, MinecraftJPVoteMissFiller.sqlpassword);
 			try {
 				MinecraftJPVoteMissFiller.c = MySQL.openConnection();
 				statement = MinecraftJPVoteMissFiller.c.createStatement();
@@ -57,7 +57,7 @@ public class OnVotifierEvent implements Listener {
 
 		UUID uuid = null;
 		try {
-			ResultSet res = statement.executeQuery("SELECT * FROM log WHERE player = '" + name + "' ORDER BY id DESC");
+			ResultSet res = statement.executeQuery("SELECT * FROM login WHERE player = '" + name + "' ORDER BY id DESC");
 			if(res.next()){
 				uuid = UUID.fromString(res.getString("uuid"));
 			}
