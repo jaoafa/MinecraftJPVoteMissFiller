@@ -6,6 +6,13 @@
   <version>0.0.1</version>
   <url>http://jaoafa.com/</url>
   <build>
+    <resources>
+      <resource>
+        <targetPath>.</targetPath>
+        <filtering>true</filtering>
+        <directory>src/main/resources/</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
