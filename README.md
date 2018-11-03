@@ -4,6 +4,6 @@
 [![Support jdk](https://img.shields.io/badge/Support%20jdk-oraclejdk8-red.svg)](https://img.shields.io)
 [![Author](https://img.shields.io/badge/Author%20MinecraftID-mine__book000-orange.svg)](https://img.shields.io)
 [![License](https://img.shields.io/badge/license-None-yellow.svg)](https://img.shields.io)  
-[jao Minecraft Server](https://jaoafa.com/)  
+[![jao Minecraft Server](https://raw.githubusercontent.com/jaoafa/jao-Minecraft-Server/master/logo/new_logo-421x97.png)](https://jaoafa.com)
 
 [Japan Minecraft Servers](http://minecraft.jp/)で多発している投票受信失敗の対応用のプラグイン。
