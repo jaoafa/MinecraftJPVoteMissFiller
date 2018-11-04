@@ -212,7 +212,7 @@ public class MCJPChecker extends BukkitRunnable{
 				connect.disconnect();
 
 				System.out.println("[MCJPMissFiller] URLGetConnected(Error): " + address);
-				System.out.println("[MCJPMissFiller] Response: " + connect.getResponseMessage() + "\n" + builder.toString());
+				System.out.println("[MCJPMissFiller] Response: " + connect.getResponseCode() + " " + connect.getResponseMessage()/* + "\n" + builder.toString() */);
 
 				return null;
 			}
