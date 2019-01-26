@@ -16,6 +16,7 @@ public class MinecraftJPVoteMissFiller extends JavaPlugin {
 	public static String sqluser;
 	public static String sqlpassword;
 	public static String sqlserver = "jaoafa.com";
+	public static long ConnectionCreate = 0;
 	public static JavaPlugin instance = null;
 	public static MinecraftJPVoteMissFiller MinecraftJPVoteMissFiller = null;
 	public static String discordtoken = null;

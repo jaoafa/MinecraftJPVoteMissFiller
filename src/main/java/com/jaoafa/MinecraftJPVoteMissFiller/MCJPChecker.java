@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -77,7 +78,17 @@ public class MCJPChecker extends BukkitRunnable{
 				alreadyreceived.remove(player);
 			}else{
 				System.out.println("[MCJPCheck_Debug] " + player + ": Vote Miss Received!");
-				new MissVoteFillerEventGoClass(plugin, player).runTaskLaterAsynchronously(plugin, 20 + i);
+				@SuppressWarnings("deprecation")
+				PlayerVoteData pvd = new PlayerVoteData(player);
+				int nowcount;
+				try {
+					nowcount = pvd.get();
+				} catch (ClassNotFoundException | UnsupportedOperationException | NullPointerException
+						| SQLException e) {
+					e.printStackTrace();
+					nowcount = -1;
+				}
+				new MissVoteFillerEventGoClass(plugin, player, nowcount).runTaskLaterAsynchronously(plugin, 20 + i);
 				i++;
 			}
 		}
