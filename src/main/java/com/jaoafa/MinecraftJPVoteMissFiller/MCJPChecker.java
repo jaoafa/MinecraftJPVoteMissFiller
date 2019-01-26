@@ -37,6 +37,9 @@ public class MCJPChecker extends BukkitRunnable{
 	}
 	@Override
 	public void run() {
+		if(plugin == null){
+			plugin = MinecraftJPVoteMissFiller.getInstance();
+		}
 		List<String> newdata = getHttpsStringToVotedPlayers("https://minecraft.jp/servers/jaoafa.com");
 		if(newdata == null){
 			return;
