@@ -6,12 +6,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.jaoafa.MinecraftJPVoteMissFiller.CustomEvent.VoteMissFillerEvent;
 
-public class MissVoteFillerEventGoClass extends BukkitRunnable{
-	static JavaPlugin plugin;
+public class MissVoteFillerEventGoClass extends BukkitRunnable {
+	JavaPlugin plugin;
 	String player;
 	int nowCount;
+
 	public MissVoteFillerEventGoClass(JavaPlugin plugin, String player, int nowCount) {
-		MCJPChecker.plugin = plugin;
+		this.plugin = plugin;
 		this.player = player;
 		this.nowCount = nowCount;
 	}
