@@ -14,7 +14,7 @@ import javax.net.ssl.HttpsURLConnection;
 import org.bukkit.Bukkit;
 import org.json.simple.JSONObject;
 
-import com.jaoafa.MinecraftJPVoteMissFiller.MinecraftJPVoteMissFiller;
+import com.jaoafa.MinecraftJPVoteMissFiller.Main;
 
 public class Discord {
 	/**
@@ -23,17 +23,17 @@ public class Discord {
 	 * @return 送信できたかどうか
 	 */
 	public static boolean DiscordSend(String message){
-		if(MinecraftJPVoteMissFiller.discordtoken == null){
+		if(Main.discordtoken == null){
 			throw new NullPointerException("DiscordSendが呼び出されましたが、discordtokenが登録されていませんでした。");
 		}
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Content-Type", "application/json");
-		headers.put("Authorization", "Bot " + MinecraftJPVoteMissFiller.discordtoken);
+		headers.put("Authorization", "Bot " + Main.discordtoken);
 		headers.put("User-Agent", "DiscordBot (https://jaoafa.com, v0.0.1)");
 
 		Map<String, String> contents = new HashMap<>();
 		contents.put("content", message);
-		return postHttpJsonByJson("https://discordapp.com/api/channels/" + MinecraftJPVoteMissFiller.serverchat_id + "/messages", headers, contents);
+		return postHttpJsonByJson("https://discordapp.com/api/channels/" + Main.serverchat_id + "/messages", headers, contents);
 	}
 
 	/**
@@ -43,12 +43,12 @@ public class Discord {
 	 * @return 送信できたかどうか
 	 */
 	public static boolean DiscordSend(String channel, String message){
-		if(MinecraftJPVoteMissFiller.discordtoken == null){
+		if(Main.discordtoken == null){
 			throw new NullPointerException("DiscordSendが呼び出されましたが、discordtokenが登録されていませんでした。");
 		}
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Content-Type", "application/json");
-		headers.put("Authorization", "Bot " + MinecraftJPVoteMissFiller.discordtoken);
+		headers.put("Authorization", "Bot " + Main.discordtoken);
 		headers.put("User-Agent", "DiscordBot (https://jaoafa.com, v0.0.1)");
 
 		Map<String, String> contents = new HashMap<>();

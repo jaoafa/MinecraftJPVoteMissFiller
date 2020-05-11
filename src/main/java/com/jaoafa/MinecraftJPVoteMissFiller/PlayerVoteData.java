@@ -1,5 +1,6 @@
 package com.jaoafa.MinecraftJPVoteMissFiller;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,28 +15,33 @@ import org.bukkit.entity.Player;
 
 public class PlayerVoteData {
 	OfflinePlayer offplayer;
+
 	/**
 	 * 指定したプレイヤーの投票データを取得します。
 	 * @param player プレイヤー
 	 * @author mine_book000
 	 */
 	public PlayerVoteData(Player player) {
-		if(player == null) throw new NullPointerException("We could not get the player.");
+		if (player == null)
+			throw new NullPointerException("We could not get the player.");
 		this.offplayer = player;
 
 		changePlayerName();
 	}
+
 	/**
 	 * 指定したオフラインプレイヤーの投票データを取得します。
 	 * @param offplayer オフラインプレイヤー
 	 * @author mine_book000
 	 */
 	public PlayerVoteData(OfflinePlayer offplayer) {
-		if(offplayer == null) throw new NullPointerException("We could not get the player.");
+		if (offplayer == null)
+			throw new NullPointerException("We could not get the player.");
 		this.offplayer = offplayer;
 
 		changePlayerName();
 	}
+
 	/**
 	 * 指定したプレイヤーネームの投票データを取得します。
 	 * @param name プレイヤーネーム
@@ -46,7 +52,8 @@ public class PlayerVoteData {
 	@Deprecated
 	public PlayerVoteData(String name) throws NullPointerException {
 		OfflinePlayer offplayer = Bukkit.getOfflinePlayer(name);
-		if(offplayer == null) throw new NullPointerException("We could not get the player.");
+		if (offplayer == null)
+			throw new NullPointerException("We could not get the player.");
 		this.offplayer = offplayer;
 
 		changePlayerName();
@@ -61,14 +68,18 @@ public class PlayerVoteData {
 	 * @throws NullPointerException プレイヤーが取得できなかったとき
 	 */
 	public int get() throws ClassNotFoundException, SQLException, UnsupportedOperationException, NullPointerException {
-		if(offplayer == null) throw new NullPointerException("We could not get the player.");
-		if(!exists()) return 0;
-		PreparedStatement statement = MySQL.getNewPreparedStatement("SELECT * FROM vote WHERE id = ?");
+		if (offplayer == null)
+			throw new NullPointerException("We could not get the player.");
+		if (!exists())
+			return 0;
+		MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+		Connection conn = sqlmanager.getConnection();
+		PreparedStatement statement = conn.prepareStatement("SELECT * FROM vote WHERE id = ?");
 		statement.setInt(1, getID());
 		ResultSet res = statement.executeQuery();
-		if(res.next()){
+		if (res.next()) {
 			return res.getInt("count");
-		}else{
+		} else {
 			throw new UnsupportedOperationException("Could not get VoteCount.");
 		}
 	}
@@ -77,11 +88,13 @@ public class PlayerVoteData {
 	 * その日のうち(前日or当日AM9:00～今)に誰も投票していないかどうか調べる（その日初めての投票かどうか）
 	 * @return 誰も投票してなければtrue
 	 */
-	public static boolean TodayFirstVote(){
-		try{
-			PreparedStatement statement = MySQL.getNewPreparedStatement("SELECT * FROM vote");
+	public static boolean TodayFirstVote() {
+		try {
+			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+			Connection conn = sqlmanager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM vote");
 			ResultSet res = statement.executeQuery();
-			while(res.next()){
+			while (res.next()) {
 				Long lasttime = Long.parseLong(res.getString("lasttime"));
 				Calendar cal = Calendar.getInstance();
 				cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
@@ -94,25 +107,25 @@ public class PlayerVoteData {
 				long now = System.currentTimeMillis() / 1000L;
 
 				boolean checktype; // true: 今日の9時 / false: 昨日の9時
-				if(today9 <= now){
+				if (today9 <= now) {
 					checktype = true;
-				}else{
+				} else {
 					checktype = false;
 				}
 
-				if(checktype){
-					if(lasttime > today9){
+				if (checktype) {
+					if (lasttime > today9) {
 						// 投票済み？
 						return false;
 					}
-				}else{
-					if(lasttime > yesterday9){
+				} else {
+					if (lasttime > yesterday9) {
 						// 投票済み？
 						return false;
 					}
 				}
 			}
-		}catch(UnsupportedOperationException | NullPointerException | NumberFormatException | ClassNotFoundException | SQLException e){
+		} catch (UnsupportedOperationException | NullPointerException | NumberFormatException | SQLException e) {
 			e.printStackTrace();
 			return false; // エラー発生したらその日の初めての投票ではないとみなす。ただしエラー通知はする
 		}
@@ -128,27 +141,32 @@ public class PlayerVoteData {
 	 * @throws NullPointerException プレイヤーが取得できなかったとき
 	 * @throws NumberFormatException 最終投票日時が正常に取得できなかったとき
 	 */
-	public Long getLastVoteUnixTime() throws ClassNotFoundException, SQLException, UnsupportedOperationException, NullPointerException, NumberFormatException {
-		if(offplayer == null) throw new NullPointerException("We could not get the player.");
-		if(!exists()) return -1L;
-		PreparedStatement statement = MySQL.getNewPreparedStatement("SELECT * FROM vote WHERE id = ?");
+	public Long getLastVoteUnixTime() throws ClassNotFoundException, SQLException, UnsupportedOperationException,
+			NullPointerException, NumberFormatException {
+		if (offplayer == null)
+			throw new NullPointerException("We could not get the player.");
+		if (!exists())
+			return -1L;
+		MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+		Connection conn = sqlmanager.getConnection();
+		PreparedStatement statement = conn.prepareStatement("SELECT * FROM vote WHERE id = ?");
 		statement.setInt(1, getID());
 		ResultSet res = statement.executeQuery();
-		if(res.next()){
+		if (res.next()) {
 			Long unixtime;
-			try{
+			try {
 				unixtime = Long.parseLong(res.getString("lasttime"));
-			}catch(NumberFormatException e){
+			} catch (NumberFormatException e) {
 				throw new NumberFormatException("最終投票日時が正常に取得できませんでした。");
 			}
 			return unixtime;
-		}else{
+		} else {
 			throw new UnsupportedOperationException("Could not get Vote LastTime.");
 		}
 	}
 
 	public boolean isVoted() {
-		try{
+		try {
 			Long lasttime = getLastVoteUnixTime();
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
@@ -161,22 +179,23 @@ public class PlayerVoteData {
 			long now = System.currentTimeMillis() / 1000L;
 
 			boolean checktype; // true: 今日の9時 / false: 昨日の9時
-			if(today9 <= now){
+			if (today9 <= now) {
 				checktype = true;
-			}else{
+			} else {
 				checktype = false;
 			}
 
-			if(checktype){
-				if(lasttime < today9){
+			if (checktype) {
+				if (lasttime < today9) {
 					return false;
 				}
-			}else{
-				if(lasttime < yesterday9){
+			} else {
+				if (lasttime < yesterday9) {
 					return false;
 				}
 			}
-		}catch(UnsupportedOperationException | NullPointerException | NumberFormatException | ClassNotFoundException | SQLException e){
+		} catch (UnsupportedOperationException | NullPointerException | NumberFormatException | ClassNotFoundException
+				| SQLException e) {
 			return false; // エラー発生したら投票してないものとみなす
 		}
 		return true; // どれもひっかからなかったら投票したものとみなす
@@ -191,9 +210,14 @@ public class PlayerVoteData {
 	 * @throws NullPointerException 内部でNullPointerExceptionが発生した場合
 	 */
 	public boolean create() throws ClassNotFoundException, SQLException, NullPointerException {
-		if(offplayer == null) throw new NullPointerException("We could not get the player.");
-		if(exists()) return false;
-		PreparedStatement statement = MySQL.getNewPreparedStatement("INSERT INTO vote (player, uuid, count, first, lasttime, last) VALUES (?, ?, ?, ?, ?, ?);");
+		if (offplayer == null)
+			throw new NullPointerException("We could not get the player.");
+		if (exists())
+			return false;
+		MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+		Connection conn = sqlmanager.getConnection();
+		PreparedStatement statement = conn.prepareStatement(
+				"INSERT INTO vote (player, uuid, count, first, lasttime, last) VALUES (?, ?, ?, ?, ?, ?);");
 		statement.setString(1, offplayer.getName()); // player
 		statement.setString(2, offplayer.getUniqueId().toString()); // uuid
 		statement.setInt(3, 1);
@@ -205,12 +229,13 @@ public class PlayerVoteData {
 		statement.setInt(5, (int) (System.currentTimeMillis() / 1000L));
 		statement.setString(6, date);
 		int count = statement.executeUpdate();
-		if(count != 0){
+		if (count != 0) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
+
 	/**
 	 * プレイヤーの投票数データが存在するかどうかを確認します。
 	 * @return 存在するかどうか
@@ -220,14 +245,18 @@ public class PlayerVoteData {
 	 * @throws UnsupportedOperationException 内部でUnsupportedOperationExceptionが発生した場合
 	 * @author mine_book000
 	 */
-	public boolean exists() throws SQLException, ClassNotFoundException, NullPointerException, UnsupportedOperationException {
-		if(offplayer == null) throw new NullPointerException("We could not get the player.");
-		PreparedStatement statement = MySQL.getNewPreparedStatement("SELECT * FROM vote WHERE uuid = ? ORDER BY id DESC");
+	public boolean exists()
+			throws SQLException, ClassNotFoundException, NullPointerException, UnsupportedOperationException {
+		if (offplayer == null)
+			throw new NullPointerException("We could not get the player.");
+		MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+		Connection conn = sqlmanager.getConnection();
+		PreparedStatement statement = conn.prepareStatement("SELECT * FROM vote WHERE uuid = ? ORDER BY id DESC");
 		statement.setString(1, offplayer.getUniqueId().toString()); // uuid
 		ResultSet res = statement.executeQuery();
-		if(res.next()){
+		if (res.next()) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -240,22 +269,26 @@ public class PlayerVoteData {
 	 * @throws NullPointerException プレイヤーが取得できなかったとき
 	 */
 	public boolean add() throws ClassNotFoundException, SQLException, NullPointerException {
-		if(offplayer == null) throw new NullPointerException("We could not get the player.");
-		if(!exists()){
+		if (offplayer == null)
+			throw new NullPointerException("We could not get the player.");
+		if (!exists()) {
 			create();
 			return true;
 		}
 		int next = get() + 1;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		PreparedStatement statement = MySQL.getNewPreparedStatement("UPDATE vote SET count = ?, lasttime = ?, last = ? WHERE id = ?");
+		MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+		Connection conn = sqlmanager.getConnection();
+		PreparedStatement statement = conn
+				.prepareStatement("UPDATE vote SET count = ?, lasttime = ?, last = ? WHERE id = ?");
 		statement.setInt(1, next);
 		statement.setInt(2, (int) (System.currentTimeMillis() / 1000L));
 		statement.setString(3, sdf.format(new Date()));
 		statement.setInt(4, getID());
 		int upcount = statement.executeUpdate();
-		if(upcount != 0){
+		if (upcount != 0) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -269,14 +302,18 @@ public class PlayerVoteData {
 	 * @throws UnsupportedOperationException 内部でUnsupportedOperationExceptionが発生した場合
 	 * @author mine_book000
 	 */
-	public int getID() throws SQLException, ClassNotFoundException, NullPointerException, UnsupportedOperationException {
-		if(offplayer == null) throw new NullPointerException("We could not get the player.");
-		PreparedStatement statement = MySQL.getNewPreparedStatement("SELECT * FROM vote WHERE uuid = ? ORDER BY id DESC");
+	public int getID()
+			throws SQLException, ClassNotFoundException, NullPointerException, UnsupportedOperationException {
+		if (offplayer == null)
+			throw new NullPointerException("We could not get the player.");
+		MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+		Connection conn = sqlmanager.getConnection();
+		PreparedStatement statement = conn.prepareStatement("SELECT * FROM vote WHERE uuid = ? ORDER BY id DESC");
 		statement.setString(1, offplayer.getUniqueId().toString()); // uuid
 		ResultSet res = statement.executeQuery();
-		if(res.next()){
+		if (res.next()) {
 			return res.getInt("id");
-		}else{
+		} else {
 			throw new UnsupportedOperationException("Could not get ID.");
 		}
 	}
@@ -286,12 +323,16 @@ public class PlayerVoteData {
 	 * @throws SQLException 内部でSQLExceptionが発生した場合
 	 * @author mine_book000
 	 */
-	public void changePlayerName(){
-		if(offplayer == null) throw new NullPointerException("We could not get the player.");
+	public void changePlayerName() {
+		if (offplayer == null)
+			throw new NullPointerException("We could not get the player.");
 		try {
-			if(!exists()) return;
+			if (!exists())
+				return;
 
-			PreparedStatement statement = MySQL.getNewPreparedStatement("UPDATE vote SET player = ? WHERE uuid = ?");
+			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+			Connection conn = sqlmanager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("UPDATE vote SET player = ? WHERE uuid = ?");
 			statement.setString(1, offplayer.getName());
 			statement.setString(2, offplayer.getUniqueId().toString());// uuid
 			statement.executeUpdate();

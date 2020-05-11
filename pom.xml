@@ -22,35 +22,28 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
+				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<artifactSet>
-								<includes>
-									<include>*</include>
-									<!-- <include>com.github.austinv11:Discord4J</include> -->
-								</includes>
-							</artifactSet>
-						</configuration>
-					</execution>
-				</executions>
 				<configuration>
+					<finalName>MinecraftJPVoteMissFiller</finalName>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<transformers>
-						<transformer
-							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<mainClass>xyz.jaoafa.mymaid.MyMaid</mainClass>
-						</transformer>
-					</transformers>
+					<archive>
+						<manifest>
+							<mainClass>com.jaoafa.MinecraftJPVoteMissFiller.Main</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<resources>
