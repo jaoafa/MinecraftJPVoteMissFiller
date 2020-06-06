@@ -1,5 +1,5 @@
 name: ${project.artifactId}
-main: com.jaoafa.MinecraftJPVoteMissFiller.MinecraftJPVoteMissFiller
+main: com.jaoafa.MinecraftJPVoteMissFiller.Main
 version: ${project.version}
 description: MinecraftJapanServersで多発している投票受信失敗の対応用のプラグイン。
 database: true
