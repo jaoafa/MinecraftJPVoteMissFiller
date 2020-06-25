@@ -34,6 +34,9 @@ public class OnVotifierEvent implements Listener {
 	@EventHandler
 	public void onVotifierEvent(VotifierEvent event) {
 		Vote vote = event.getVote();
+		System.out.println(
+				"onVotifierEvent[MinecraftJPVoteMissFiller]: " + vote.getUsername() + " " + vote.getAddress() + " "
+						+ vote.getServiceName() + " " + vote.getTimeStamp());
 		String name = vote.getUsername();
 
 		UUID uuid = null;
