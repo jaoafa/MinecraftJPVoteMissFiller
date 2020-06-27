@@ -37,6 +37,9 @@ public class OnVotifierEvent implements Listener {
 		System.out.println(
 				"onVotifierEvent[MinecraftJPVoteMissFiller]: " + vote.getUsername() + " " + vote.getAddress() + " "
 						+ vote.getServiceName() + " " + vote.getTimeStamp());
+		if (!vote.getAddress().equalsIgnoreCase("minecraft.jp")) {
+			return;
+		}
 		String name = vote.getUsername();
 
 		UUID uuid = null;

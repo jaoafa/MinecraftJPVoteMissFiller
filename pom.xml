@@ -75,6 +75,10 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
+        <repository>
+            <id>bintray-repo</id>
+            <url>https://dl.bintray.com/ichbinjoe/public/</url>
+        </repository>
 	</repositories>
 
 	<dependencies>
@@ -98,15 +102,13 @@
 			<systemPath>${basedir}/lib/craftbukkit-1.12.2.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
-		<!-- Votifier -->
+		<!-- NuVotifier -->
 		<dependency>
-			<groupId>com.vexsoftware</groupId>
-			<artifactId>votifier</artifactId>
-			<version>1.9</version>
-			<classifier>shaded</classifier>
-			<systemPath>${basedir}/lib/votifier-1.9.jar</systemPath>
-			<scope>system</scope>
-		</dependency>
+            <groupId>com.vexsoftware</groupId>
+            <artifactId>nuvotifier-universal</artifactId>
+            <version>2.6.0</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 	<url>http://jaoafa.com/</url>
 </project>
